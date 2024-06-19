@@ -108,7 +108,7 @@ class Queryconfig:
                 self.raw_config="raw"
                 self.curated_config="curated"
                 self.bi_config="analytics"
-                self.bucket= "niyo-de-prod-data"
+                self.bucket= "xxxx-de-beta-data"
                 self.path= "athena_query_output"
                 self.workgroup="ETL"
                 self.client=boto3.client('athena', region_name='ap-south-1')
@@ -214,7 +214,7 @@ class MongoSparksession:
             day = now.day
             hour = now.hour
             path = (
-                    f"s3a://niyo-de-prod-x2/raw/{source}/{database.lower()}/{collection.lower()}/"
+                    f"s3a://xxxx-de-beta-xy/raw/{source}/{database.lower()}/{collection.lower()}/"
                     + "/ingest_year="
                     + "{:0>4}".format(str(year))
                     + "/ingest_month="
@@ -233,8 +233,8 @@ class MongoSparksession:
             log.info(f"Start time : {self.start_time}")
             return self.start_time
             
-        def read_mongo_x2(self,database,collection,pipeline):
-            creds=self.get_secret("arn:aws:secretsmanager:ap-south-1:859061673455:secret:prod/de/x2/Mongo-3MwFDp")
+        def read_mongo_xy(self,database,collection,pipeline):
+            creds=self.get_secret("arn:aws:secretsmanager:ap-south-1:85XXXXXXXXX55:secret:beta/de/xy/xxxxx-3MwFDp")
            
             
             dataframe=self.spark.read\
@@ -242,7 +242,7 @@ class MongoSparksession:
                     .format('mongodb')\
                     .option("samplingRatio","1.0")  \
                     .option("ssl.domain_match","false") \
-                    .option("connection.uri",f"mongodb+srv://{creds['Username']}:{creds[' Password']}@prod-x2-pl-3.lw4uz.mongodb.net/") \
+                    .option("connection.uri",f"mongodb+srv://{creds['Username']}:{creds[' Password']}@xxxxxxxxxxxxxxxx.mongodb.net/") \
                     .option("database", database) \
                     .option("collection", collection) \
                     .option("samplePoolSize",1000000)  \
@@ -757,7 +757,7 @@ class Dataframe(Sparksession):
             log.warning(f"Filtered {column_name} with {value}")
             return dataframe
       def checkpoint(self,dataframe):
-           self.spark.sparkContext.setCheckpointDir("s3a://niyo-de-prod-data/emr/checkpoints/")
+           self.spark.sparkContext.setCheckpointDir("s3a://xxxx-de-beta-data/emr/checkpoints/")
            dataframe.checkpoint()
            dataframe.count()   
            log.info("Dataframe Checkpointed")
@@ -809,7 +809,7 @@ class Main(Dataframe,Queryconfig):
          self.start_time=super().get_start_time()
          self.final_table=final_table
          self.database="configs"
-         self.__excel_config_path='s3://niyo-de-prod-data/de-prod-data-lake/data-lake/configs/source-to-target-mappings/source_to_target_mapping.xlsx'
+         self.__excel_config_path='s3://xxxx-de-beta-data/de-beta-data-lake/data-lake/configs/source-to-target-mappings/source_to_target_mapping.xlsx'
          self.c_map=None
          self.DeltaTable=DeltaTable
          self.dataframe=None

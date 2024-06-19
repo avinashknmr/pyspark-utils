@@ -51,7 +51,7 @@ class SparkMongoReader:
         day = now.day
         hour = now.hour
         path = (
-                f"s3a://niyo-de-prod-x2/raw/{source}/{database.lower()}/{collection.lower()}/"
+                f"s3a://xxxx-de-beta-xy/raw/{source}/{database.lower()}/{collection.lower()}/"
                 + "/ingest_year="
                 + "{:0>4}".format(str(year))
                 + "/ingest_month="
@@ -70,8 +70,8 @@ class SparkMongoReader:
         logger.info(f"Start time : {self.start_time}")
         return self.start_time
         
-    def read_mongo_x2(self,database,collection,pipeline):
-        creds=self.get_secret("arn:aws:secretsmanager:ap-south-1:859061673455:secret:prod/de/x2/Mongo-3MwFDp")
+    def read_mongo_xy(self,database,collection,pipeline):
+        creds=self.get_secret("arn:aws:secretsmanager:ap-south-1:859XXXXXXX55:secret:beta/de/xy/Mongo-3MwFDp")
         
         
         dataframe=self.spark.read\
@@ -79,7 +79,7 @@ class SparkMongoReader:
                 .format('mongodb')\
                 .option("samplingRatio","1.0")  \
                 .option("ssl.domain_match","false") \
-                .option("connection.uri",f"mongodb+srv://{creds['Username']}:{creds[' Password']}@prod-x2-pl-3.lw4uz.mongodb.net/") \
+                .option("connection.uri",f"mongodb+srv://{creds['Username']}:{creds[' Password']}@beta-xy-pl-3.xxxxx.mongodb.net/") \
                 .option("database", database) \
                 .option("collection", collection) \
                 .option("samplePoolSize",1000000)  \

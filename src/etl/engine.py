@@ -2,7 +2,6 @@ import logging
 import base64
 import json
 from datetime import datetime, timezone
-import boto3
 from pyspark.sql import SparkSession
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s | %(levelname)-8s | %(name)-6s | %(message)s', datefmt='%Y-%m-%d %I:%M:%S %p')
@@ -16,7 +15,6 @@ DELTA_CORE_VERSION = "2.4.0"
 
 class MongoToS3Ingestion:
     def __init__(self):
-        super().__init__()
         self.spark = (SparkSession.builder.appName("DWH-ETL")
             .config("spark.jars.packages",f"org.mongodb.spark:mongo-spark-connector_{SCALA_VERSION}:{MONGO_SPARK_CONNECTOR_VERSION}")
             .config("spark.sql.caseSensitive",True)
@@ -65,7 +63,7 @@ class MongoToS3Ingestion:
         
         if data.isEmpty()==False:
             data.coalesce(partitions).write.mode(mode).format(format).save(path)
-            logger.info("Data ingested to S3 in delta format.")
+            logger.info(f"Data ingested to '{path}' in delta format.")
         else:
             logger.warning("No records in dataframe.")
 
@@ -74,7 +72,6 @@ class MongoToS3Ingestion:
 
 class SourceToTargetMapper:
     def __init__(self):
-        super().__init__()
         self.spark = (SparkSession.builder.appName("DWH-ETL")
             .config("spark.jars.packages",f"com.crealytics:spark-excel_{SCALA_VERSION}:{CREALYTICS_EXCEL_VERSION}") 
             .getOrCreate()
@@ -105,7 +102,6 @@ class SourceToTargetMapper:
 
 class DataProcessor:
     def __init__(self):
-        super().__init__()
         self.spark = (SparkSession.builder.appName("DWH-ETL")
             .config("spark.jars.packages",f"io.delta:delta-core_{SCALA_VERSION}:{DELTA_CORE_VERSION}") 
             .config("spark.sql.extensions", "io.delta.sql.DeltaSparkSessionExtension" ) 

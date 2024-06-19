@@ -5,7 +5,7 @@ class Main(Dataframe,Queryconfig):
         self.start_time=super().get_start_time()
         self.final_table=final_table
         self.database="configs"
-        self.__excel_config_path='s3://niyo-de-prod-data/de-prod-data-lake/data-lake/configs/source-to-target-mappings/source_to_target_mapping.xlsx'
+        self.__excel_config_path='s3://xxxx-de-beta-data/de-beta-data-lake/data-lake/configs/source-to-target-mappings/source_to_target_mapping.xlsx'
         self.c_map=None
         self.DeltaTable=DeltaTable
         self.dataframe=None
