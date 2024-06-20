@@ -3,8 +3,8 @@ from pyspark.sql import SparkSession
 from pyspark.sql.functions import col, to_timestamp
 from pyspark.sql.types import StructType, StructField, StringType, IntegerType, ArrayType, LongType
 from pyspark.testing.utils import assertDataFrameEqual, assertSchemaEqual
-from pyspark_utils.etl.transform import functions as cF
-from pyspark_utils.etl.transform import clean as cT
+from pyspark_utils.data.transform import functions as cF
+from pyspark_utils.data.transform import clean as cT
 from datetime import datetime
 
 @pytest.fixture(scope="session")
