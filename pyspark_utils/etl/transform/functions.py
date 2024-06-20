@@ -1,7 +1,7 @@
 import logging
 from datetime import datetime, timezone
 import boto3
-from pyspark.sql.functions import udf, col, regexp_replace, sha2, from_utc_timestamp, to_timestamp
+from pyspark.sql.functions import udf, col, regexp_replace, sha2, from_utc_timestamp, to_timestamp, from_unixtime
 from pyspark.sql.types import StringType, ArrayType, StructType, TimestampType, DateType
 from pyspark.sql import SparkSession, DataFrame
 
@@ -13,12 +13,15 @@ def array_to_string(input_array):
     return regexp_replace(input_array.cast("string"), r'\[|\]|"', '')
 
 @udf(returnType=TimestampType())
-def string_to_timestamp(date_str, date_format):
+def udf_string_to_timestamp(date_str, date_format):
     return datetime.strptime(date_str, date_format)
 
 @udf(returnType=TimestampType())
-def epoch_to_timestamp(epoch_seconds):
+def udf_epoch_to_timestamp(epoch_seconds):
     return datetime.fromtimestamp(epoch_seconds)
+
+def epoch_to_timestamp(epoch_seconds):
+    return to_timestamp(from_unixtime(epoch_seconds))
 
 def convert_timezone(timestamp, from_tz='UTC', to_tz='Asia/Kolkata'):
     if timestamp is None:
@@ -31,8 +34,9 @@ def utc_to_ist(timestamp):
     ist_timestamp = convert_timezone(timestamp, 'UTC', 'Asia/Kolkata')
     return ist_timestamp
 
-def string_to_ist(date_str, date_format):
-    timestamp = string_to_timestamp(date_str, date_format="yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
+@udf(returnType=TimestampType()) # to be tested
+def udf_string_to_ist(date_str, date_format):
+    timestamp = udf_string_to_timestamp(date_str, date_format="yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
     ist_timestamp = utc_to_ist(timestamp)
     return ist_timestamp
 
