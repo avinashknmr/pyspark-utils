@@ -17,7 +17,7 @@ def required_jars(req_jars:list=[]):
     return jars
 
 MONGO_CONFIGS = {
-    "spark.sql.caseSensitive": True,
+    "spark.sql.caseSensitive": "true",
     "spark.mongodb.input.partitionerOptions.partitionSizeMB": "64", 
     "spark.mongodb.input.partitioner": "MongoSplitVectorPartitioner",
     "spark.speculation": "false",
@@ -26,4 +26,22 @@ MONGO_CONFIGS = {
     "mapreduce.fileoutputcommitter.marksuccessfuljobs": "false", 
     "fs.file.impl.disable.cache": "true",
     "parquet.enable.summary-metadata": "false"
+}
+
+DELTA_CONFIGS = {
+    "spark.sql.extensions": "io.delta.sql.DeltaSparkSessionExtension",
+    "spark.databricks.delta.retentionDurationCheck.enabled": "false", 
+    "spark.databricks.delta.schema.autoMerge.enabled": "true",
+    "spark.sql.caseSensitive": "true",
+    "spark.sql.catalog.spark_catalog": "org.apache.spark.sql.delta.catalog.DeltaCatalog",
+    "spark.databricks.delta.vacuum.parallelDelete.enabled": "true",
+    "spark.databricks.delta.merge.enableLowShuffle": "true",
+    "spark.databricks.delta.optimizeWrite.enabled": "true",
+    "spark.databricks.delta.optimize.maxFileSize": 104857600,
+    "spark.databricks.delta.properties.defaults.autoOptimize.optimizeWrite": "true",
+    "spark.databricks.delta.compatibility.symlinkFormatManifest.enabled": "true",
+    "spark.sql.legacy.parquet.datetimeRebaseModeInWrite": "CORRECTED",
+    "spark.sql.parquet.datetimeRebaseModeInRead": "LEGACY",
+    "spark.sql.parquet.int96RebaseModeInWrite": "LEGACY",
+    "spark.hadoop.fs.s3a.impl": "org.apache.hadoop.fs.s3a.S3AFileSystem",  
 }
