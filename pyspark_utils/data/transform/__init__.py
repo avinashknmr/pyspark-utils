@@ -20,8 +20,12 @@ def flatten(df, columns=None):
         return df
     
     struct_cols = [col(nc + '.' + c).alias(nc + '_' + c) for nc in nested_cols if isinstance(df.schema[nc].dataType, StructType) for c in df.select(nc+'.*').columns]
+    flat_df = df.select(flat_cols + struct_cols)
     exploded_cols = [explode_outer(nc).alias(nc) for nc in nested_cols if isinstance(df.schema[nc].dataType, ArrayType)]
-    flat_df = df.select(flat_cols + struct_cols + exploded_cols)
+
+    for explode_col in exploded_cols:
+        flat_df = flat_df.select('*', explode_col)
+    
     return flatten(flat_df)
 
 def pivot(df, array_col, pivot_col):

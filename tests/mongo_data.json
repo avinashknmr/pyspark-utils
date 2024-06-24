@@ -1,0 +1,74 @@
+{
+    "_id": "event12345",
+    "eventName": "Tech Conference 2024",
+    "date": "2024-09-15",
+    "location": {
+      "venue": "Tech Convention Center",
+      "address": {
+        "street": "123 Innovation Drive",
+        "city": "Tech City",
+        "state": "CA",
+        "zip": "94016"
+      },
+      "coordinates": {
+        "latitude": 37.7749,
+        "longitude": -122.4194
+      }
+    },
+    "organizer": {
+      "name": "Tech Events Inc.",
+      "contact": {
+        "email": "info@techevents.com",
+        "phone": "+1-800-555-1234"
+      }
+    },
+    "attendees": [
+      {
+        "name": "John Doe",
+        "email": "john.doe@example.com",
+        "ticketType": "VIP"
+      },
+      {
+        "name": "Jane Smith",
+        "email": "jane.smith@example.com",
+        "ticketType": "Standard"
+      }
+    ],
+    "sessions": [
+      {
+        "sessionId": "sess001",
+        "title": "Opening Keynote",
+        "speaker": "Dr. Tech",
+        "time": "09:00 AM - 10:00 AM"
+      },
+      {
+        "sessionId": "sess002",
+        "title": "AI and the Future",
+        "speaker": "Prof. AI",
+        "time": "10:30 AM - 11:30 AM"
+      }
+    ],
+    "sponsors": [
+      {
+        "name": "Tech Corp",
+        "level": "Gold"
+      },
+      {
+        "name": "Innovate Ltd.",
+        "level": "Silver"
+      }
+    ],
+    "feedback": [
+      {
+        "attendeeEmail": "john.doe@example.com",
+        "rating": 5,
+        "comments": "Great event, very insightful!"
+      },
+      {
+        "attendeeEmail": "jane.smith@example.com",
+        "rating": 4,
+        "comments": "Well organized, but could use more breaks."
+      }
+    ]
+  }
+  

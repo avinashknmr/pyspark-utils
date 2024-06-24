@@ -4,7 +4,7 @@ from pyspark.testing.utils import assertDataFrameEqual, assertSchemaEqual
 
 from pyspark_utils.session import SparkSessionManager
 from pyspark_utils.data.transform import functions as cF
-from pyspark_utils.data.transform import clean as cT
+from pyspark_utils.data import transform as cT
 from datetime import datetime
 
 @pytest.fixture(scope="session")
