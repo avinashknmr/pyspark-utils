@@ -1,3 +1,4 @@
 Pipfile*
 dist/
 build/
+**/__pycache__/*
