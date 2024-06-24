@@ -1,0 +1,6 @@
+[2024-06-24 14:55:41,505] [    INFO] - logger.py - Logger Initialized.
+[2024-06-24 14:55:48,056] [ WARNING] - <ipython-input-2-2c5f579a35d8> - Be careful
+[2024-06-24 14:55:53,970] [CRITICAL] - <ipython-input-3-cfbb4cebdd41> - Be careful
+[38;20m[2024-06-24 15:01:46,980] [    INFO] - logger.py:66 - Logger Initialized.[0m
+[31;1m[2024-06-24 15:01:52,640] [CRITICAL] - <ipython-input-2-cfbb4cebdd41>:1 - Be careful[0m
+[33;20m[2024-06-24 15:02:05,345] [ WARNING] - <ipython-input-3-2c5f579a35d8>:1 - Be careful[0m
