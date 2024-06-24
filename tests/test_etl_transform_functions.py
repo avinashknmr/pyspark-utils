@@ -1,5 +1,6 @@
 import pytest
 from pyspark.sql import SparkSession
+from pyspark.sql.functions import col, to_timestamp
 from pyspark.sql.types import StructType, StructField, StringType, IntegerType, ArrayType, LongType
 from pyspark.testing.utils import assertDataFrameEqual, assertSchemaEqual
 from pyspark_utils.etl.transform import functions as cF
@@ -49,6 +50,13 @@ def test_sha256_hash(spark):
     original_df = spark.createDataFrame([('pyspark',)], ["name"])
     expected_df = spark.createDataFrame([('pyspark', '91d17428d146fdbc804cb441daf689de97679bf6aee2ba4fb9e5920d7e174664')], ["name", "hashed"])
     transformed_df = original_df.withColumn('hashed', cF.sha256_hash('name'))
+    assertDataFrameEqual(transformed_df, expected_df)
+
+def test_year_frac(spark):
+    original_df = spark.createDataFrame([(datetime(2023, 5, 1), datetime(2024, 6, 20))], ["from_dt", "to_dt"])
+    expected_df = spark.createDataFrame([(datetime(2023, 5, 1), datetime(2024, 6, 20), 1.1344086025)], ["from_dt", "to_dt", "year_frac"])
+    transformed_df = original_df.withColumn('year_frac', cF.year_frac('from_dt' , 'to_dt'))
+    assertSchemaEqual(transformed_df.schema, expected_df.schema)
     assertDataFrameEqual(transformed_df, expected_df)
 
 def test_flatten(spark, original_df):

@@ -50,5 +50,5 @@ def epoch_to_ist(epoch_seconds):
 def sha256_hash(input_str, bytes=256):
     return sha2(input_str, bytes)
 
-# def year_frac(from_date, to_date=current_date()):
-#     return months_between(to_date, from_date)/12
+def year_frac(from_dt, to_dt):
+    return months_between(to_dt, from_dt)/12
