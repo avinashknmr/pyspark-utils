@@ -3,38 +3,12 @@ from pyspark import SparkConf, SparkContext
 from threading import Lock
 from .config.presets import required_jars
 
-class SingleSparkSession:
-    _instance = None
-    # _lock = Lock()
-    
-    def __new__(cls, jars=None, additional_conf=None, *args, **kwargs):
-        app_name = kwargs.get('app_name', 'myapp')
-        # with cls._lock:
-        print(cls._instance)
-        if not cls._instance:
-            cls._instance = super(SingleSparkSession, cls).__new__(cls)
-            builder = SparkSession.builder.appName(app_name)
-            if jars:
-                builder = builder.config("spark.jars.packages", ",".join(required_jars(jars)))
-            if additional_conf:
-                for key, value in additional_conf.items():
-                    builder.config(key, value)
-            cls._instance.spark = builder.getOrCreate()
-        return cls._instance
-    
-    @staticmethod
-    def get_instance():
-        return SingleSparkSession._instance.spark
-    
-    @staticmethod
-    def stop():
-        if SingleSparkSession._instance:
-            SingleSparkSession._instance.spark.stop()
-            SingleSparkSession._instance = None
-
 class SparkSessionManager:
-    def __init__(self, app_name, jars=[], spark_config={}):
+    def __init__(self, host='local[1]', app_name='MyApp', jars=[], spark_config={}):
         self.app_name = app_name
+        self.host = host
+        if not isinstance(jars, list):
+            jars = [jars]
         self.jars = jars
         self.spark_config = spark_config
         if self.jars:
@@ -46,7 +20,7 @@ class SparkSessionManager:
         if self.spark_session is not None:
             raise Exception("SparkSession already exists. Please stop it first.")
         # Create SparkConf
-        conf = SparkConf().setAppName(self.app_name)
+        conf = SparkConf().setMaster(self.host).setAppName(self.app_name)
 
         for key, value in self.spark_config.items():
             conf.set(key, value)
@@ -70,6 +44,8 @@ class SparkSessionManager:
 
     def restart(self, new_jars=[], new_spark_config={}, overwrite=False):
         self.stop()
+        if not isinstance(new_jars, list):
+            new_jars = [new_jars]
         if overwrite:
             self.spark_config = new_spark_config
             if new_jars:

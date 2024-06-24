@@ -1,20 +1,18 @@
 import pytest
-from pyspark.sql import SparkSession
-from pyspark.sql.functions import col, to_timestamp
 from pyspark.sql.types import StructType, StructField, StringType, IntegerType, ArrayType, LongType
 from pyspark.testing.utils import assertDataFrameEqual, assertSchemaEqual
+
+from pyspark_utils.session import SparkSessionManager
 from pyspark_utils.data.transform import functions as cF
 from pyspark_utils.data.transform import clean as cT
 from datetime import datetime
 
 @pytest.fixture(scope="session")
 def spark():
-    spark = SparkSession.builder \
-        .appName("pytest-pyspark-local-testing") \
-        .master("local[1]") \
-        .getOrCreate()
+    spark_manager = SparkSessionManager(app_name='pytest-pyspark-local-testing')
+    spark = spark_manager.create()
     yield spark
-    spark.stop()
+    spark_manager.stop()
 
 @pytest.fixture(scope="module")
 def original_df(spark):
