@@ -1,7 +1,9 @@
 import logging
 from datetime import datetime, timezone
 import boto3
-from pyspark.sql.functions import udf, col, regexp_replace, sha2, from_utc_timestamp, to_timestamp, from_unixtime
+from pyspark.sql.functions import (udf, col, regexp_replace, sha2,
+                                   from_utc_timestamp, to_timestamp,
+                                   from_unixtime, months_between, current_date)
 from pyspark.sql.types import StringType, ArrayType, StructType, TimestampType, DateType
 from pyspark.sql import SparkSession, DataFrame
 
@@ -47,3 +49,6 @@ def epoch_to_ist(epoch_seconds):
 
 def sha256_hash(input_str, bytes=256):
     return sha2(input_str, bytes)
+
+# def year_frac(from_date, to_date=current_date()):
+#     return months_between(to_date, from_date)/12
