@@ -6,26 +6,27 @@ def flatten(df, columns=None):
         df = df.select(*columns)
 
     flat_cols = []
-    nested_cols = []
+    struct_cols = []
+    array_cols = []
 
     for column in df.columns:
         if isinstance(df.schema[column].dataType, StructType):
-            nested_cols.append(column)
+            struct_cols.append(column)
         elif isinstance(df.schema[column].dataType, ArrayType):
-            nested_cols.append(column)
+            array_cols.append(column)
         else:
             flat_cols.append(column)
     
-    if not nested_cols:
+    if not (struct_cols + array_cols):
         return df
     
-    struct_cols = [col(nc + '.' + c).alias(nc + '_' + c) for nc in nested_cols if isinstance(df.schema[nc].dataType, StructType) for c in df.select(nc+'.*').columns]
-    flat_df = df.select(flat_cols + struct_cols)
-    exploded_cols = [explode_outer(nc).alias(nc) for nc in nested_cols if isinstance(df.schema[nc].dataType, ArrayType)]
+    struct_cols = [col(nc + '.' + c).alias(nc + '_' + c) for nc in struct_cols if isinstance(df.schema[nc].dataType, StructType) for c in df.select(nc+'.*').columns]
+    flat_df = df.select(flat_cols + struct_cols + array_cols)
+    exploded_cols = [(nc, explode_outer(nc).alias(nc)) for nc in array_cols if isinstance(df.schema[nc].dataType, ArrayType)]
 
-    for explode_col in exploded_cols:
-        flat_df = flat_df.select('*', explode_col)
-    
+    for original_col, explode_col in exploded_cols:
+        flat_df = flat_df.withColumn(original_col, explode_col)
+
     return flatten(flat_df)
 
 def pivot(df, array_col, pivot_col):
