@@ -1,0 +1,28 @@
+connections:
+  uat_redshift: &uat_redshift
+    type: redshift
+    host:
+    port:
+    username:
+    password:
+    database:
+    collection:
+  prod_mongo: &prod_mongo
+    type: mongo
+    host:
+    port:
+    username:
+    password:
+  prod_de_data: &prod_s3_data
+    type: aws_s3
+    bucket:
+pipelines:
+  events_staging:
+    source:
+      <<: *prod_mongo
+      database:
+      collection:
+    destination:
+      <<: *prod_s3_data
+      path:
+    transformations:
