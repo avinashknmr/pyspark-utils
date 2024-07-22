@@ -1,11 +1,8 @@
-import logging
+from loguru import logger
 import base64
 import json
 from datetime import datetime, timezone
 from pyspark.sql import SparkSession
-
-logging.basicConfig(level=logging.INFO, format='%(asctime)s | %(levelname)-8s | %(name)-6s | %(message)s', datefmt='%Y-%m-%d %I:%M:%S %p')
-logger = logging.getLogger("DWH-ETL")
 
 SCALA_VERSION = "2.12"
 SPARK_VERSION = "3.5.0"
