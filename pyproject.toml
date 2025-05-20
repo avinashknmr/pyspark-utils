@@ -8,10 +8,11 @@ readme = "README.md"
 
 [tool.poetry.dependencies]
 python = "^3.11"
-pyspark = "^3.5.1"
+pyspark = "3.5.2"
 boto3 = "^1.34.129"
 pyyaml = "^6.0.1"
 loguru = "^0.7.2"
+findspark = "^2.0.1"
 
 [tool.poetry.group.dev.dependencies]
 pdoc = "^14.5.0"

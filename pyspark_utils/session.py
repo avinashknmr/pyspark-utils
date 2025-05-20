@@ -1,7 +1,11 @@
+import findspark
+findspark.init()
 from pyspark.sql import SparkSession
 from pyspark import SparkConf, SparkContext
 from threading import Lock
 from .config.presets import required_jars
+from loguru import logger
+logger.add("logs/session.log", rotation="10 MB", retention="10 days", level="INFO")
 
 class SparkSessionManager:
     def __init__(self, host='local[1]', app_name='MyApp', jars=[], spark_config={}):
@@ -15,6 +19,7 @@ class SparkSessionManager:
             self.spark_config.update({"spark.jars.packages": ",".join(required_jars(self.jars))})
         self.spark_session = None
         self.spark_context = None
+        logger.debug('SparkSession Manager Initialized')
 
     def create(self):
         if self.spark_session is not None:
@@ -30,17 +35,19 @@ class SparkSessionManager:
 
         # Create SparkSession
         self.spark_session = SparkSession.builder.config(conf=conf).getOrCreate()
-
+        logger.info('SparkSession Started')
         return self.spark_session
 
     def stop(self):
         if self.spark_session is not None:
             self.spark_session.stop()
             self.spark_session = None
+            logger.info('SparkSession Stopped')
         
         if self.spark_context is not None:
             self.spark_context.stop()
             self.spark_context = None
+            logger.info('SparkSession Stopped')
 
     def restart(self, new_jars=[], new_spark_config={}, overwrite=False):
         self.stop()
@@ -51,10 +58,12 @@ class SparkSessionManager:
             if new_jars:
                 self.jars = new_jars
                 self.spark_config.update({"spark.jars.packages": ",".join(required_jars(self.jars))})
+                logger.info('SparkSession Restarted')
             
         else:
             if new_jars:
                 self.jars.extend(new_jars)
                 new_spark_config.update({"spark.jars.packages": ",".join(required_jars(self.jars))})
             self.spark_config.update(new_spark_config)
+            logger.info('SparkSession Restarted')
         return self.create()

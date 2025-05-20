@@ -1,15 +1,15 @@
 SCALA_VERSION = "2.12"
-SPARK_VERSION = "3.5.0"
-MONGO_SPARK_CONNECTOR_VERSION = "10.3.0"
-CREALYTICS_EXCEL_VERSION = f"{SPARK_VERSION}_0.20.3"
-DELTA_CORE_VERSION = "2.4.0"
+SPARK_VERSION = "3.5.2"
+MONGO_SPARK_CONNECTOR_VERSION = "10.4.1"
+CREALYTICS_EXCEL_VERSION = "3.5.1_0.20.4"
+DELTA_SPARK_VERSION = "3.3.0"
 
 def required_jars(req_jars:list=[]):
     jars = []
     jars_map = {
         "mongo": f"org.mongodb.spark:mongo-spark-connector_{SCALA_VERSION}:{MONGO_SPARK_CONNECTOR_VERSION}",
         "excel": f"com.crealytics:spark-excel_{SCALA_VERSION}:{CREALYTICS_EXCEL_VERSION}",
-        "delta": f"io.delta:delta-core_{SCALA_VERSION}:{DELTA_CORE_VERSION}"
+        "delta": f"io.delta:delta-spark_{SCALA_VERSION}:{DELTA_SPARK_VERSION}"
     }
     for rj in req_jars:
         if rj in jars_map.keys():
